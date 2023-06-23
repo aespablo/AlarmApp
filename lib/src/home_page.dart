@@ -24,7 +24,14 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => TimerUtils.timePicker(context),
+            onPressed: () async {
+              final timer = await TimerUtils.timePicker(context);
+              if (timer == null) {
+                return;
+              }
+
+              final memo = await TimerUtils.inputMemo(context);
+            },
             icon: Icon(
               Icons.add,
               color: Theme.of(context).colorScheme.onSurface,

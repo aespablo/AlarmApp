@@ -1,6 +1,6 @@
-import 'package:alarm/alarm_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:alarm/timer_utils.dart';
+import 'package:alarm/src/alarm_widget.dart';
+import 'package:alarm/utils/timer_utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,16 +47,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            const Divider(height: 0),
-            const AlarmWidget(),
-            const Divider(height: 0),
-            const AlarmWidget(),
-            const Divider(height: 0),
-            const AlarmWidget(),
-            const Divider(height: 0),
-            const AlarmWidget(),
-            const Divider(height: 0),
-            const AlarmWidget(),
             const Divider(height: 0),
             const AlarmWidget(),
             const Divider(height: 0),

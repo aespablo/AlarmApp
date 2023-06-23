@@ -1,4 +1,4 @@
-package com.verdl.alarm.alarm
+package com.verdl.alarm
 
 import io.flutter.embedding.android.FlutterActivity
 

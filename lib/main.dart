@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:alarm/src/home_page.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:alarm/src/home_page.dart';
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Future.delayed(const Duration(milliseconds: 10));
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
   FlutterNativeSplash.remove();
 }
 

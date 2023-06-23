@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        centerTitle: true,
         title: Text(
           '알람',
           style: TextStyle(
@@ -32,25 +33,27 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 10, left: 15),
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Alarm',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 10, left: 15),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  '목록',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            const Divider(height: 0),
-            const AlarmWidget(),
-            const Divider(height: 0),
-          ],
+              const Divider(height: 0),
+              const AlarmWidget(),
+              const Divider(height: 0),
+            ],
+          ),
         ),
       ),
     );

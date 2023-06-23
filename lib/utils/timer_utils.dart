@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:alarm/models/alarm.dart';
 import 'package:logger/logger.dart';
 
 class TimerUtils {

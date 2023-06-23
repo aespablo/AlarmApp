@@ -1,0 +1,31 @@
+name: alarm
+description: 알람은 만국 공통
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.5 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  sqflite: ^2.2.8+4
+  awesome_notifications: ^0.7.4+1
+  path: ^1.8.3
+  logger: ^1.4.0
+  google_fonts: ^5.1.0
+  flutter_slidable: ^3.0.0
+  freezed: ^2.3.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true

@@ -42,31 +42,34 @@ class _HomePageState extends ConsumerState<HomePage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SingleChildScrollView(
-            child: asyncAlarms.when(
-          data: (alarms) => ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(top: 10, left: 15),
-                alignment: Alignment.topLeft,
-                child: Text(
-                  '목록',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.bold,
+          child: asyncAlarms.when(
+            data: (alarms) {
+              alarmList = alarms;
+              return ListView(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 10, left: 15),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      '목록',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const Divider(height: 0),
-              for (final alarm in alarms) AlarmWidget(alarm: alarm),
-              const Divider(height: 0),
-            ],
+                  const Divider(height: 0),
+                  for (final alarm in alarms) AlarmWidget(alarm: alarm),
+                ],
+              );
+            },
+            error: (err, stack) => const CircularProgressIndicator(),
+            loading: () => const CircularProgressIndicator(),
           ),
-          error: (err, stack) => Container(),
-          loading: () => Container(),
-        )),
+        ),
       ),
     );
   }
@@ -79,10 +82,18 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     final memo = await TimerUtils.inputMemo(context);
 
-    if (memo == null) {
+    if (memo == null || !mounted) {
       return;
     }
 
-    // Alarm alarm = Alarm(idx: idx, label: label, timeOfDay: timeOfDay, isAlive: isAlive)
+    Alarm alarm = Alarm(
+      idx: alarmList.length,
+      label: memo,
+      timeOfDay: timer.format(context),
+      isAlive: 1,
+    );
+
+    await ref.read(asyncAlarmProvider.notifier).insertAlarm(alarm);
+    setState(() {});
   }
 }

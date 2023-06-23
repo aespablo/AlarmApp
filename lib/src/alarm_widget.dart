@@ -19,44 +19,52 @@ class _AlarmWidgetState extends State<AlarmWidget> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
-        ),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            child: Row(
               children: [
-                Text(
-                  '3:50',
-                  style: TextStyle(
-                    fontSize: 35,
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.w100,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.alarm.timeOfDay,
+                      style: TextStyle(
+                        fontSize: 35,
+                        color: Theme.of(context).colorScheme.onBackground,
+                        fontWeight: FontWeight.w100,
+                      ),
+                    ),
+                    if (widget.alarm.label.isNotEmpty)
+                      Text(
+                        widget.alarm.label,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.w100,
+                        ),
+                      )
+                    else
+                      Container(),
+                  ],
                 ),
-                Text(
-                  '알람 메모',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.w100,
-                  ),
+                const Spacer(),
+                Switch(
+                  value: isCheck,
+                  onChanged: (check) {
+                    isCheck = check;
+                    setState(() {});
+                  },
                 ),
               ],
             ),
-            const Spacer(),
-            Switch(
-              value: isCheck,
-              onChanged: (check) {
-                isCheck = check;
-                setState(() {});
-              },
-            ),
-          ],
-        ),
+          ),
+          const Divider(height: 0),
+        ],
       ),
     );
   }

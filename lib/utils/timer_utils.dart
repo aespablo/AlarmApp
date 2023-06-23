@@ -5,6 +5,7 @@ class TimerUtils {
   static Future<TimeOfDay?> timePicker(
     BuildContext context,
   ) async {
+    // 시간 선택한 후, TimeOfDay 형식으로 저장
     final picker = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -14,13 +15,15 @@ class TimerUtils {
       Logger().i('picker: ${picker.format(context)}');
     }
 
+    // 위에서 선택한 값 반환
     return picker;
   }
 
   static Future<String?> inputMemo(
     BuildContext context,
   ) async {
-    String inputText = '';
+    // 메모 저장용 변수 (null 형식일 시, 취소됨)
+    String? inputText = '';
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -32,16 +35,13 @@ class TimerUtils {
                 labelText: '라벨',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (text) {
-                inputText = text;
-                Logger().i('memo: $inputText');
-              },
+              onChanged: (text) => inputText = text,
             ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                inputText = '';
+                inputText = null;
                 Navigator.pop(context);
               },
               child: const Text('취소'),

@@ -146,7 +146,8 @@ class AlarmDBHelper {
       'CREATE TABLE $_alarmTable('
       'idx INTEGER PRIMARY KEY, '
       'label TEXT, '
-      'timeOfDay TEXT)',
+      'timeOfDay TEXT, '
+      'isAlive INTEGER)',
     );
   }
 }

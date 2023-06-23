@@ -23,6 +23,7 @@ mixin _$Alarm {
   int get idx => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
   String get timeOfDay => throw _privateConstructorUsedError;
+  int get isAlive => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,7 @@ abstract class $AlarmCopyWith<$Res> {
   factory $AlarmCopyWith(Alarm value, $Res Function(Alarm) then) =
       _$AlarmCopyWithImpl<$Res, Alarm>;
   @useResult
-  $Res call({int idx, String label, String timeOfDay});
+  $Res call({int idx, String label, String timeOfDay, int isAlive});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$AlarmCopyWithImpl<$Res, $Val extends Alarm>
     Object? idx = null,
     Object? label = null,
     Object? timeOfDay = null,
+    Object? isAlive = null,
   }) {
     return _then(_value.copyWith(
       idx: null == idx
@@ -67,6 +69,10 @@ class _$AlarmCopyWithImpl<$Res, $Val extends Alarm>
           ? _value.timeOfDay
           : timeOfDay // ignore: cast_nullable_to_non_nullable
               as String,
+      isAlive: null == isAlive
+          ? _value.isAlive
+          : isAlive // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -77,7 +83,7 @@ abstract class _$$_AlarmCopyWith<$Res> implements $AlarmCopyWith<$Res> {
       __$$_AlarmCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int idx, String label, String timeOfDay});
+  $Res call({int idx, String label, String timeOfDay, int isAlive});
 }
 
 /// @nodoc
@@ -92,6 +98,7 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
     Object? idx = null,
     Object? label = null,
     Object? timeOfDay = null,
+    Object? isAlive = null,
   }) {
     return _then(_$_Alarm(
       idx: null == idx
@@ -106,6 +113,10 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
           ? _value.timeOfDay
           : timeOfDay // ignore: cast_nullable_to_non_nullable
               as String,
+      isAlive: null == isAlive
+          ? _value.isAlive
+          : isAlive // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -114,7 +125,10 @@ class __$$_AlarmCopyWithImpl<$Res> extends _$AlarmCopyWithImpl<$Res, _$_Alarm>
 @JsonSerializable()
 class _$_Alarm implements _Alarm {
   const _$_Alarm(
-      {required this.idx, required this.label, required this.timeOfDay});
+      {required this.idx,
+      required this.label,
+      required this.timeOfDay,
+      required this.isAlive});
 
   factory _$_Alarm.fromJson(Map<String, dynamic> json) =>
       _$$_AlarmFromJson(json);
@@ -125,10 +139,12 @@ class _$_Alarm implements _Alarm {
   final String label;
   @override
   final String timeOfDay;
+  @override
+  final int isAlive;
 
   @override
   String toString() {
-    return 'Alarm(idx: $idx, label: $label, timeOfDay: $timeOfDay)';
+    return 'Alarm(idx: $idx, label: $label, timeOfDay: $timeOfDay, isAlive: $isAlive)';
   }
 
   @override
@@ -139,12 +155,13 @@ class _$_Alarm implements _Alarm {
             (identical(other.idx, idx) || other.idx == idx) &&
             (identical(other.label, label) || other.label == label) &&
             (identical(other.timeOfDay, timeOfDay) ||
-                other.timeOfDay == timeOfDay));
+                other.timeOfDay == timeOfDay) &&
+            (identical(other.isAlive, isAlive) || other.isAlive == isAlive));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, idx, label, timeOfDay);
+  int get hashCode => Object.hash(runtimeType, idx, label, timeOfDay, isAlive);
 
   @JsonKey(ignore: true)
   @override
@@ -164,7 +181,8 @@ abstract class _Alarm implements Alarm {
   const factory _Alarm(
       {required final int idx,
       required final String label,
-      required final String timeOfDay}) = _$_Alarm;
+      required final String timeOfDay,
+      required final int isAlive}) = _$_Alarm;
 
   factory _Alarm.fromJson(Map<String, dynamic> json) = _$_Alarm.fromJson;
 
@@ -174,6 +192,8 @@ abstract class _Alarm implements Alarm {
   String get label;
   @override
   String get timeOfDay;
+  @override
+  int get isAlive;
   @override
   @JsonKey(ignore: true)
   _$$_AlarmCopyWith<_$_Alarm> get copyWith =>

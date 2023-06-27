@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:alarm/models/alarm.dart';
 import 'package:alarm/src/alarm_widget.dart';
 import 'package:alarm/utils/timer_utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:alarm/providers/async_alarm_notifier.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
+  static List<Alarm> alarmList = [];
+
   const HomePage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends ConsumerState<HomePage> {
-  List<Alarm> alarmList = [];
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final asyncAlarms = ref.watch(asyncAlarmProvider);
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +25,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: _setupAlarm,
+            onPressed: () => _setupAlarm(context, ref, alarmList),
             icon: Icon(
               Icons.add,
               color: Theme.of(context).colorScheme.onSurface,
@@ -43,53 +38,67 @@ class _HomePageState extends ConsumerState<HomePage> {
         child: asyncAlarms.when(
           data: (alarms) {
             alarmList = alarms;
-            return ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 15),
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    '목록',
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const Divider(height: 0),
-                for (final alarm in alarms) AlarmWidget(alarm: alarm),
-              ],
-            );
+            return _alarmListView(context, alarms);
           },
+          loading: () => _alarmListView(context, alarmList),
           error: (err, stack) => const CircularProgressIndicator(),
-          loading: () => const CircularProgressIndicator(),
         ),
       ),
     );
   }
 
-  Future<void> _setupAlarm() async {
-    final timer = await TimerUtils.timePicker(context);
-    if (timer == null || !mounted) {
-      return;
-    }
-
-    final memo = await TimerUtils.inputMemo(context);
-    if (memo == null || !mounted) {
-      return;
-    }
-
-    Alarm alarm = Alarm(
-      idx: alarmList.length,
-      label: memo,
-      timeOfDay: timer.format(context),
-      isAlive: 1,
+  ListView _alarmListView(
+    BuildContext context,
+    List<Alarm> alarms,
+  ) {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(top: 10, left: 15),
+          alignment: Alignment.topLeft,
+          child: Text(
+            '목록',
+            style: TextStyle(
+              fontSize: 30,
+              color: Theme.of(context).colorScheme.onBackground,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const Divider(height: 0),
+        for (final alarm in alarms) AlarmWidget(alarm: alarm),
+      ],
     );
+  }
 
-    await ref.read(asyncAlarmProvider.notifier).insertAlarm(alarm);
-    setState(() {});
+  Future<void> _setupAlarm(
+    BuildContext context,
+    WidgetRef ref,
+    List<Alarm> alarms,
+  ) async {
+    final timer = await TimerUtils.timePicker(context);
+    if (timer == null) {
+      return;
+    }
+
+    if (context.mounted) {
+      final memo = await TimerUtils.inputMemo(context);
+      if (memo == null) {
+        return;
+      }
+
+      if (context.mounted) {
+        Alarm alarm = Alarm(
+          idx: alarms.length,
+          label: memo,
+          timeOfDay: timer.format(context),
+          isAlive: 1,
+        );
+
+        await ref.read(asyncAlarmProvider.notifier).insertAlarm(alarm);
+      }
+    }
   }
 }

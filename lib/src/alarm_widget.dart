@@ -2,19 +2,16 @@ import 'package:alarm/models/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:logger/logger.dart';
 
 import '../providers/async_alarm_notifier.dart';
 import '../utils/timer_utils.dart';
 
 class AlarmWidget extends ConsumerStatefulWidget {
-  final List<Alarm> alarms;
-  final int idx;
+  final Alarm alarm;
 
   const AlarmWidget({
     super.key,
-    required this.alarms,
-    required this.idx,
+    required this.alarm,
   });
 
   @override
@@ -26,7 +23,6 @@ class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final alarm = widget.alarms[widget.idx];
     return Slidable(
       key: const ValueKey(0),
       endActionPane: ActionPane(
@@ -44,7 +40,7 @@ class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
         ],
       ),
       child: InkWell(
-        onTap: () => _editAlarm(alarm),
+        onTap: () => _editAlarm(widget.alarm),
         child: Column(
           children: [
             Padding(
@@ -58,16 +54,16 @@ class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        alarm.timeOfDay,
+                        widget.alarm.timeOfDay,
                         style: TextStyle(
                           fontSize: 35,
                           color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.w100,
                         ),
                       ),
-                      if (alarm.label.isNotEmpty)
+                      if (widget.alarm.label.isNotEmpty)
                         Text(
-                          alarm.label,
+                          widget.alarm.label,
                           style: TextStyle(
                             fontSize: 15,
                             color: Theme.of(context).colorScheme.onBackground,
@@ -121,6 +117,6 @@ class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
   }
 
   Future<void> _deleteAlarm() async {
-    await ref.read(asyncAlarmProvider.notifier).deleteAlarm(widget.idx);
+    await ref.read(asyncAlarmProvider.notifier).deleteAlarm(widget.alarm.idx);
   }
 }

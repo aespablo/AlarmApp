@@ -60,11 +60,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 const Divider(height: 0),
-                for (final alarm in alarms)
-                  AlarmWidget(
-                    alarms: alarms,
-                    idx: alarm.idx,
-                  ),
+                for (final alarm in alarms) AlarmWidget(alarm: alarm),
               ],
             );
           },

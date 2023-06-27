@@ -38,20 +38,13 @@ class AsyncAlarmNotifier extends AsyncNotifier<List<Alarm>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final alarmList = (await _fetchAlarm()).toList();
-      await AlarmDBHelper.deleteItem(idx);
       for (int i = idx + 1; i < alarmList.length; i++) {
         await AlarmDBHelper.updateItem(
-            alarm: alarmList[i].copyWith(idx: i - 1));
+          alarm: alarmList[i].copyWith(idx: i - 1),
+        );
       }
+      await AlarmDBHelper.deleteItem(alarmList.length - 1);
 
-      return _fetchAlarm();
-    });
-  }
-
-  Future<void> deleteAllAlarm() async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
-      await AlarmDBHelper.deleteAll();
       return _fetchAlarm();
     });
   }

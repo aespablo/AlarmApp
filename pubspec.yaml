@@ -13,16 +13,17 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   sqflite: ^2.2.8+4
-  awesome_notifications: ^0.7.4+1
   path: ^1.8.3
+  intl: ^0.17.0
   logger: ^1.4.0
   google_fonts: ^5.1.0
+  json_annotation: ^4.8.1
+  flutter_riverpod: ^2.3.6
   flutter_slidable: ^3.0.0
   freezed_annotation: ^2.2.0
-  json_annotation: ^4.8.1
   flutter_native_splash: ^2.3.1
-  flutter_riverpod: ^2.3.6
-  intl: ^0.17.0
+  awesome_notifications: ^0.7.4+1
+  android_alarm_manager_plus: ^3.0.1
 
 dev_dependencies:
   flutter_test:

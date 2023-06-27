@@ -1,15 +1,20 @@
 import 'package:alarm/models/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:logger/logger.dart';
 
 import '../providers/async_alarm_notifier.dart';
 import '../utils/timer_utils.dart';
 
 class AlarmWidget extends ConsumerStatefulWidget {
-  final Alarm alarm;
+  final List<Alarm> alarms;
+  final int idx;
+
   const AlarmWidget({
     super.key,
-    required this.alarm,
+    required this.alarms,
+    required this.idx,
   });
 
   @override
@@ -21,62 +26,80 @@ class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _editAlarm,
-      child: Column(
+    final alarm = widget.alarms[widget.idx];
+    return Slidable(
+      key: const ValueKey(0),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        dismissible: DismissiblePane(
+          onDismissed: _deleteAlarm,
+        ),
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.alarm.timeOfDay,
-                      style: TextStyle(
-                        fontSize: 35,
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontWeight: FontWeight.w100,
-                      ),
-                    ),
-                    if (widget.alarm.label.isNotEmpty)
+          SlidableAction(
+            onPressed: (context) => _deleteAlarm(),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            label: "삭제",
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () => _editAlarm(alarm),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        widget.alarm.label,
+                        alarm.timeOfDay,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 35,
                           color: Theme.of(context).colorScheme.onBackground,
                           fontWeight: FontWeight.w100,
                         ),
-                      )
-                    else
-                      Container(),
-                  ],
-                ),
-                const Spacer(),
-                Switch(
-                  value: isCheck,
-                  onChanged: (check) {
-                    isCheck = check;
-                    setState(() {});
-                  },
-                ),
-              ],
+                      ),
+                      if (alarm.label.isNotEmpty)
+                        Text(
+                          alarm.label,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Theme.of(context).colorScheme.onBackground,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        )
+                      else
+                        Container(),
+                    ],
+                  ),
+                  const Spacer(),
+                  Switch(
+                    value: isCheck,
+                    onChanged: (check) {
+                      isCheck = check;
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Divider(height: 0),
-        ],
+            const Divider(height: 0),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _editAlarm() async {
+  Future<void> _editAlarm(Alarm origin) async {
     final timer = await TimerUtils.timePicker(
       context,
-      timeOfDay: TimerUtils.stringToTimeOfDay(widget.alarm.timeOfDay),
+      timeOfDay: TimerUtils.stringToTimeOfDay(origin.timeOfDay),
     );
     if (timer == null || !mounted) {
       return;
@@ -88,12 +111,16 @@ class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
     }
 
     Alarm alarm = Alarm(
-      idx: widget.alarm.idx,
+      idx: origin.idx,
       label: memo,
       timeOfDay: timer.format(context),
       isAlive: 1,
     );
 
     await ref.read(asyncAlarmProvider.notifier).updateAlarm(alarm);
+  }
+
+  Future<void> _deleteAlarm() async {
+    await ref.read(asyncAlarmProvider.notifier).deleteAlarm(widget.idx);
   }
 }

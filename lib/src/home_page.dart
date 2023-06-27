@@ -18,7 +18,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final asyncAlarms = ref.watch(asyncAlarmProvider);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -61,7 +60,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
                 const Divider(height: 0),
-                for (final alarm in alarms) AlarmWidget(alarm: alarm),
+                for (final alarm in alarms)
+                  AlarmWidget(
+                    alarms: alarms,
+                    idx: alarm.idx,
+                  ),
               ],
             );
           },

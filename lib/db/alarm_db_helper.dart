@@ -31,8 +31,11 @@ class AlarmDBHelper {
       final db = await _db();
       for (int i = 0; i < alarms.length; i++) {
         final data = alarms[i].toJson();
-        await db.insert(_alarmTable, data,
-            conflictAlgorithm: sql.ConflictAlgorithm.replace);
+        await db.insert(
+          _alarmTable,
+          data,
+          conflictAlgorithm: sql.ConflictAlgorithm.replace,
+        );
       }
 
       return 1;
@@ -95,7 +98,7 @@ class AlarmDBHelper {
   }) async {
     try {
       final db = await _db();
-      for (int i = 0; i < 10; i++) {
+      for (int i = 0; i < alarmData.length; i++) {
         await db.update(
           _alarmTable,
           alarmData[i].toJson(),

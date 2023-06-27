@@ -1,7 +1,11 @@
 import 'package:alarm/models/alarm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AlarmWidget extends StatefulWidget {
+import '../providers/async_alarm_notifier.dart';
+import '../utils/timer_utils.dart';
+
+class AlarmWidget extends ConsumerStatefulWidget {
   final Alarm alarm;
   const AlarmWidget({
     super.key,
@@ -9,16 +13,16 @@ class AlarmWidget extends StatefulWidget {
   });
 
   @override
-  State<AlarmWidget> createState() => _AlarmWidgetState();
+  ConsumerState<AlarmWidget> createState() => _AlarmWidgetState();
 }
 
-class _AlarmWidgetState extends State<AlarmWidget> {
+class _AlarmWidgetState extends ConsumerState<AlarmWidget> {
   bool isCheck = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: _editAlarm,
       child: Column(
         children: [
           Padding(
@@ -67,5 +71,29 @@ class _AlarmWidgetState extends State<AlarmWidget> {
         ],
       ),
     );
+  }
+
+  Future<void> _editAlarm() async {
+    final timer = await TimerUtils.timePicker(
+      context,
+      timeOfDay: TimerUtils.stringToTimeOfDay(widget.alarm.timeOfDay),
+    );
+    if (timer == null || !mounted) {
+      return;
+    }
+
+    final memo = await TimerUtils.inputMemo(context);
+    if (memo == null || !mounted) {
+      return;
+    }
+
+    Alarm alarm = Alarm(
+      idx: widget.alarm.idx,
+      label: memo,
+      timeOfDay: timer.format(context),
+      isAlive: 1,
+    );
+
+    await ref.read(asyncAlarmProvider.notifier).updateAlarm(alarm);
   }
 }

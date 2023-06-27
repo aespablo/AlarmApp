@@ -1,9 +1,9 @@
-import 'package:alarm/models/alarm.dart';
-import 'package:alarm/providers/async_alarm_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:alarm/models/alarm.dart';
 import 'package:alarm/src/alarm_widget.dart';
 import 'package:alarm/utils/timer_utils.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:alarm/providers/async_alarm_notifier.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -41,34 +41,32 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: asyncAlarms.when(
-            data: (alarms) {
-              alarmList = alarms;
-              return ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(top: 10, left: 15),
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      '목록',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Theme.of(context).colorScheme.onBackground,
-                        fontWeight: FontWeight.bold,
-                      ),
+        child: asyncAlarms.when(
+          data: (alarms) {
+            alarmList = alarms;
+            return ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(top: 10, left: 15),
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    '목록',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Theme.of(context).colorScheme.onBackground,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Divider(height: 0),
-                  for (final alarm in alarms) AlarmWidget(alarm: alarm),
-                ],
-              );
-            },
-            error: (err, stack) => const CircularProgressIndicator(),
-            loading: () => const CircularProgressIndicator(),
-          ),
+                ),
+                const Divider(height: 0),
+                for (final alarm in alarms) AlarmWidget(alarm: alarm),
+              ],
+            );
+          },
+          error: (err, stack) => const CircularProgressIndicator(),
+          loading: () => const CircularProgressIndicator(),
         ),
       ),
     );
@@ -81,7 +79,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
 
     final memo = await TimerUtils.inputMemo(context);
-
     if (memo == null || !mounted) {
       return;
     }

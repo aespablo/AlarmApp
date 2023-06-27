@@ -1,15 +1,17 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:alarm/models/alarm.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class TimerUtils {
   static Future<TimeOfDay?> timePicker(
-    BuildContext context,
-  ) async {
+    BuildContext context, {
+    TimeOfDay? timeOfDay,
+  }) async {
     // 시간 선택한 후, TimeOfDay 형식으로 저장
     final picker = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: timeOfDay ?? TimeOfDay.now(),
     );
 
     if (context.mounted && picker != null) {
@@ -58,5 +60,10 @@ class TimerUtils {
 
     Logger().i('memo: $inputText');
     return inputText;
+  }
+
+  static TimeOfDay stringToTimeOfDay(String tod) {
+    final format = DateFormat.jm();
+    return TimeOfDay.fromDateTime(format.parse(tod));
   }
 }

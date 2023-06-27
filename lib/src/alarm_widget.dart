@@ -20,9 +20,9 @@ class AlarmWidget extends ConsumerWidget {
       key: const ValueKey(0),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
-        dismissible: DismissiblePane(
-          onDismissed: () => _deleteAlarm(ref),
-        ),
+        // dismissible: DismissiblePane(
+        //   onDismissed: () => _deleteAlarm(ref),
+        // ),
         children: [
           SlidableAction(
             onPressed: (context) => _deleteAlarm(ref),
@@ -82,10 +82,7 @@ class AlarmWidget extends ConsumerWidget {
     );
   }
 
-  Future<void> _editAlarm(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
+  Future<void> _editAlarm(BuildContext context, WidgetRef ref) async {
     final timer = await TimerUtils.timePicker(
       context,
       timeOfDay: TimerUtils.stringToTimeOfDay(alarm.timeOfDay),
@@ -113,16 +110,11 @@ class AlarmWidget extends ConsumerWidget {
     }
   }
 
-  Future<void> _deleteAlarm(
-    WidgetRef ref,
-  ) async {
-    await ref.read(asyncAlarmProvider.notifier).deleteAlarm(alarm.idx);
+  void _deleteAlarm(WidgetRef ref) {
+    ref.read(asyncAlarmProvider.notifier).deleteAlarm(alarm.idx);
   }
 
-  Future<void> _switchAction(
-    WidgetRef ref,
-    bool check,
-  ) async {
+  Future<void> _switchAction(WidgetRef ref, bool check) async {
     final newAlarm = alarm.copyWith(isAlive: check ? 1 : 0);
     await ref.read(asyncAlarmProvider.notifier).updateAlarm(newAlarm);
   }

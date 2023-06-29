@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:alarm/src/home_page.dart';
+import 'package:logger/logger.dart';
 
 Future<void> main() async {
   await _initSetup();
@@ -42,5 +43,8 @@ void _setAlarmPermission() {
   flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
+      ?.requestPermission()
+      .then((value) {
+    Logger().i('result: $value');
+  });
 }

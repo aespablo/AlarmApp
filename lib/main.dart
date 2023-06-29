@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:alarm/src/home_page.dart';
 
 Future<void> main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Future.delayed(const Duration(milliseconds: 10));
+  await _initSetup();
   runApp(const ProviderScope(child: MyApp()));
-  FlutterNativeSplash.remove();
+  _setAlarmPermission();
 }
 
 class MyApp extends StatelessWidget {
@@ -28,4 +27,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
     );
   }
+}
+
+Future<void> _initSetup() async {
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await Future.delayed(const Duration(milliseconds: 10));
+  FlutterNativeSplash.remove();
+}
+
+void _setAlarmPermission() {
+  // 만약 이미 권한이 설정되어 있었다면, 건너뜀
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../providers/async_alarm_notifier.dart';
+import '../utils/alarm_utils.dart';
 import '../utils/timer_utils.dart';
 
 class AlarmWidget extends ConsumerWidget {
@@ -103,6 +104,11 @@ class AlarmWidget extends ConsumerWidget {
           label: memo,
           timeOfDay: timer.format(context),
           isAlive: alarm.isAlive,
+        );
+
+        await scheduleDailyNotification(
+          alarm.idx,
+          TimeOfDay(hour: timer.hour, minute: timer.minute),
         );
 
         await ref.read(asyncAlarmProvider.notifier).updateAlarm(newAlarm);

@@ -7,6 +7,7 @@ import 'package:alarm/providers/async_alarm_notifier.dart';
 
 import '../services/notification.dart';
 import '../services/permission.dart';
+import '../utils/alarm_utils.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   static List<Alarm> alarmList = [];
@@ -48,7 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => _setupAlarm(context, ref, HomePage.alarmList),
+            onPressed: _setPermission,
             icon: Icon(
               Icons.lock_person_outlined,
               color: Theme.of(context).colorScheme.onSurface,
@@ -127,8 +128,18 @@ class _HomePageState extends ConsumerState<HomePage> {
           isAlive: 1,
         );
 
+        await scheduleDailyNotification(
+          alarms.length,
+          TimeOfDay(hour: timer.hour, minute: timer.minute),
+        );
+
         await ref.read(asyncAlarmProvider.notifier).insertAlarm(alarm);
       }
     }
+  }
+
+  Future<void> _setPermission() async {
+    await requestPermissions();
+    setState(() {});
   }
 }

@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:logger/logger.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -48,9 +51,9 @@ const String darwinNotificationCategoryText = 'textCategory';
 const String darwinNotificationCategoryPlain = 'plainCategory';
 
 Future<void> configNotification() async {
-  // tz.initializeTimeZone();
-  // final String timeZoneName = await FlutterTimezone.getLocalTimezone();
-  // tz.setLocalLocation(tz.getLocation(timeZoneName));
+  tz.initializeTimeZones();
+  final String timeZoneName = await FlutterTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName));
 
   final NotificationAppLaunchDetails? notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -98,14 +101,14 @@ void _notificationTapBackground(
 }
 
 AndroidInitializationSettings _androidInitSetup() {
-  return const AndroidInitializationSettings('app_icon');
+  return const AndroidInitializationSettings('ic_launcher');
 }
 
 DarwinInitializationSettings _darwinInitSetup() {
   return DarwinInitializationSettings(
-    requestAlertPermission: false,
-    requestBadgePermission: false,
-    requestSoundPermission: false,
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
     onDidReceiveLocalNotification: (
       int id,
       String? title,

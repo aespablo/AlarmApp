@@ -48,3 +48,8 @@ void _setAlarmPermission() {
     Logger().i('result: $value');
   });
 }
+
+@pragma('vm:entry-point')
+void _notificationTapBackground(NotificationResponse notificationResponse) {
+  // handle action
+}

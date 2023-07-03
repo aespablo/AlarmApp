@@ -1,3 +1,4 @@
+import 'package:alarm/services/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -9,7 +10,6 @@ import 'package:logger/logger.dart';
 Future<void> main() async {
   await _initSetup();
   runApp(const ProviderScope(child: MyApp()));
-  _setAlarmPermission();
 }
 
 class MyApp extends StatelessWidget {
@@ -33,23 +33,7 @@ class MyApp extends StatelessWidget {
 Future<void> _initSetup() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await configNotification();
   await Future.delayed(const Duration(milliseconds: 10));
   FlutterNativeSplash.remove();
-}
-
-void _setAlarmPermission() {
-  // 만약 이미 권한이 설정되어 있었다면, 건너뜀
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission()
-      .then((value) {
-    Logger().i('result: $value');
-  });
-}
-
-@pragma('vm:entry-point')
-void _notificationTapBackground(NotificationResponse notificationResponse) {
-  // handle action
 }

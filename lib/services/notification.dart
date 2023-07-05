@@ -144,7 +144,10 @@ List<DarwinNotificationCategory> _darwinNotifyCategories() {
     DarwinNotificationCategory(
       darwinNotificationCategoryPlain,
       actions: <DarwinNotificationAction>[
-        DarwinNotificationAction.plain('id_1', 'Action 1'),
+        DarwinNotificationAction.plain(
+          'id_1',
+          'Action 1',
+        ),
         DarwinNotificationAction.plain(
           'id_2',
           'Action 2 (destructive)',

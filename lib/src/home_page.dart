@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:alarm/models/alarm.dart';
-import 'package:alarm/src/alarm_widget.dart';
-import 'package:alarm/utils/timer_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:alarm/providers/async_alarm_notifier.dart';
 
+import '../providers/async_alarm_notifier.dart';
 import '../services/notification.dart';
 import '../services/permission.dart';
 import '../utils/alarm_utils.dart';
+import '../utils/timer_utils.dart';
+import '../models/alarm.dart';
+import 'alarm_widget.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   static List<Alarm> alarmList = [];

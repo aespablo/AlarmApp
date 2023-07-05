@@ -1,4 +1,3 @@
-import 'package:alarm/models/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../providers/async_alarm_notifier.dart';
 import '../utils/alarm_utils.dart';
 import '../utils/timer_utils.dart';
+import '../models/alarm.dart';
 
 class AlarmWidget extends ConsumerWidget {
   final Alarm alarm;

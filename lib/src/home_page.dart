@@ -49,7 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: _setPermission,
+            onPressed: normalAlert,
             icon: Icon(
               Icons.lock_person_outlined,
               color: Theme.of(context).colorScheme.onSurface,

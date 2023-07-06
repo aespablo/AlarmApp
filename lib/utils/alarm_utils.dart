@@ -7,12 +7,14 @@ import '../services/notification.dart';
 
 Future<void> scheduleDailyNotification(
   int id,
+  String? title,
+  String? body,
   TimeOfDay tod,
 ) async {
   await flutterLocalNotificationsPlugin.zonedSchedule(
     id,
-    'daily scheduled notification title',
-    'daily scheduled notification body',
+    title,
+    body,
     _setupTimer(tod),
     NotificationDetails(
       android: AndroidNotificationDetails(

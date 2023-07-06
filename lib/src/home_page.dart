@@ -130,6 +130,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
         await scheduleDailyNotification(
           alarms.length,
+          alarm.timeOfDay,
+          alarm.label == '' ? null : alarm.label,
           TimeOfDay(hour: timer.hour, minute: timer.minute),
         );
 

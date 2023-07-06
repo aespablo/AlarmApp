@@ -108,6 +108,8 @@ class AlarmWidget extends ConsumerWidget {
 
         await scheduleDailyNotification(
           alarm.idx,
+          alarm.timeOfDay,
+          memo == '' ? null : memo,
           TimeOfDay(hour: timer.hour, minute: timer.minute),
         );
 

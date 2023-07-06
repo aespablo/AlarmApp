@@ -129,7 +129,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         );
 
         await scheduleDailyNotification(
-          alarms.length,
+          alarm.idx,
           alarm.timeOfDay,
           alarm.label == '' ? null : alarm.label,
           TimeOfDay(hour: timer.hour, minute: timer.minute),
@@ -138,10 +138,5 @@ class _HomePageState extends ConsumerState<HomePage> {
         await ref.read(asyncAlarmProvider.notifier).insertAlarm(alarm);
       }
     }
-  }
-
-  Future<void> _setPermission() async {
-    await requestPermissions();
-    setState(() {});
   }
 }

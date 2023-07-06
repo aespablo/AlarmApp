@@ -5,21 +5,33 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../services/notification.dart';
 
+const soundPath = 'assets/raw/ateapill.wav';
+
 Future<void> normalAlert() async {
-  const AndroidNotificationDetails androidNotificationDetails =
-      AndroidNotificationDetails(
+  const androidNotificationDetails = AndroidNotificationDetails(
     'AlarmId',
     'AlarmChannel',
     channelDescription: 'Main alalrm description',
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound('ateapill'),
   );
+
+  const darwinNotificationDetails = DarwinNotificationDetails(
+    presentSound: true,
+    sound: soundPath,
+  );
+
   await flutterLocalNotificationsPlugin.show(
     99,
     '일반 제목',
     '일반 바디',
-    const NotificationDetails(android: androidNotificationDetails),
+    const NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: darwinNotificationDetails,
+    ),
     payload: 'item x',
   );
 }

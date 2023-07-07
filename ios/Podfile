@@ -1,7 +1,7 @@
-# Uncomment this line to define a global platform for your project
+# 프로젝트의 글로벌 플랫폼을 정의하려면 이 줄에 주석 처리를 해제하세요.
 # platform :ios, '11.0'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+# CocoaPods 분석은 Flutter 빌드 지연 시간에 영향을 미치는 네트워크 통계를 동기식으로 전송합니다.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {

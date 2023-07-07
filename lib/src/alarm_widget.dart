@@ -1,10 +1,11 @@
-import 'package:alarm/models/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../providers/async_alarm_notifier.dart';
+import '../utils/alarm_utils.dart';
 import '../utils/timer_utils.dart';
+import '../models/alarm.dart';
 
 class AlarmWidget extends ConsumerWidget {
   final Alarm alarm;
@@ -20,9 +21,9 @@ class AlarmWidget extends ConsumerWidget {
       key: const ValueKey(0),
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
-        dismissible: DismissiblePane(
-          onDismissed: () => _deleteAlarm(ref),
-        ),
+        // dismissible: DismissiblePane(
+        //   onDismissed: () => _deleteAlarm(ref),
+        // ),
         children: [
           SlidableAction(
             onPressed: (context) => _deleteAlarm(ref),
@@ -82,10 +83,7 @@ class AlarmWidget extends ConsumerWidget {
     );
   }
 
-  Future<void> _editAlarm(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
+  Future<void> _editAlarm(BuildContext context, WidgetRef ref) async {
     final timer = await TimerUtils.timePicker(
       context,
       timeOfDay: TimerUtils.stringToTimeOfDay(alarm.timeOfDay),
@@ -108,21 +106,23 @@ class AlarmWidget extends ConsumerWidget {
           isAlive: alarm.isAlive,
         );
 
+        await scheduleDailyNotification(
+          newAlarm.idx,
+          newAlarm.timeOfDay,
+          memo == '' ? null : memo,
+          TimeOfDay(hour: timer.hour, minute: timer.minute),
+        );
+
         await ref.read(asyncAlarmProvider.notifier).updateAlarm(newAlarm);
       }
     }
   }
 
-  Future<void> _deleteAlarm(
-    WidgetRef ref,
-  ) async {
-    await ref.read(asyncAlarmProvider.notifier).deleteAlarm(alarm.idx);
+  void _deleteAlarm(WidgetRef ref) {
+    ref.read(asyncAlarmProvider.notifier).deleteAlarm(alarm.idx);
   }
 
-  Future<void> _switchAction(
-    WidgetRef ref,
-    bool check,
-  ) async {
+  Future<void> _switchAction(WidgetRef ref, bool check) async {
     final newAlarm = alarm.copyWith(isAlive: check ? 1 : 0);
     await ref.read(asyncAlarmProvider.notifier).updateAlarm(newAlarm);
   }

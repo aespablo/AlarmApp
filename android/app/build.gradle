@@ -27,10 +27,13 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.verdl.alarm"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+        // 새 언어 API 지원을 사용하도록 플래그를 설정합니다.
+        coreLibraryDesugaringEnabled true
+        // Java 호환성을 Java 8로 설정합니다.
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -44,20 +47,21 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // TODO: 고유한 애플리케이션 ID(https://developer.android.com/studio/build/application-id.html)를 지정하세요.
         applicationId "com.verdl.alarm"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        // 애플리케이션 요구 사항에 맞게 다음 값을 업데이트할 수 있습니다.
+        // 자세한 내용은 https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration 을 참조하세요.
         minSdkVersion 21
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 33
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // TODO: 릴리스 빌드에 대한 고유한 서명 구성을 추가합니다.
+            // 지금은 디버그 키로 서명하므로 `flutter run --release`가 작동합니다.
             signingConfig signingConfigs.debug
         }
     }
@@ -68,5 +72,10 @@ flutter {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.window:window:1.0.0"
+
+    // For Java-friendly APIs to register and unregister callbacks
+    implementation "androidx.window:window-java:1.0.0"
 }

@@ -1,17 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:alarm/models/alarm.dart';
-import 'package:alarm/src/alarm_widget.dart';
-import 'package:alarm/utils/timer_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:alarm/providers/async_alarm_notifier.dart';
 
-class HomePage extends ConsumerWidget {
+import '../providers/async_alarm_notifier.dart';
+import '../services/notification.dart';
+import '../services/permission.dart';
+import '../utils/alarm_utils.dart';
+import '../utils/timer_utils.dart';
+import '../models/alarm.dart';
+import 'alarm_widget.dart';
+
+class HomePage extends ConsumerStatefulWidget {
   static List<Alarm> alarmList = [];
-
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
+    isAndroidPermissionGranted();
+    requestPermissions();
+    configureDidReceiveLocalNotificationSubject(context);
+    configureSelectNotificationSubject(context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    didReceiveLocalNotificationStream.close();
+    selectNotificationStream.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final asyncAlarms = ref.watch(asyncAlarmProvider);
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +49,14 @@ class HomePage extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => _setupAlarm(context, ref, alarmList),
+            onPressed: normalAlert,
+            icon: Icon(
+              Icons.lock_person_outlined,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          IconButton(
+            onPressed: () => _setupAlarm(context, ref, HomePage.alarmList),
             icon: Icon(
               Icons.add,
               color: Theme.of(context).colorScheme.onSurface,
@@ -37,10 +68,10 @@ class HomePage extends ConsumerWidget {
       body: SafeArea(
         child: asyncAlarms.when(
           data: (alarms) {
-            alarmList = alarms;
+            HomePage.alarmList = alarms;
             return _alarmListView(context, alarms);
           },
-          loading: () => _alarmListView(context, alarmList),
+          loading: () => _alarmListView(context, HomePage.alarmList),
           error: (err, stack) => const CircularProgressIndicator(),
         ),
       ),
@@ -95,6 +126,13 @@ class HomePage extends ConsumerWidget {
           label: memo,
           timeOfDay: timer.format(context),
           isAlive: 1,
+        );
+
+        await scheduleDailyNotification(
+          alarm.idx,
+          alarm.timeOfDay,
+          alarm.label == '' ? null : alarm.label,
+          TimeOfDay(hour: timer.hour, minute: timer.minute),
         );
 
         await ref.read(asyncAlarmProvider.notifier).insertAlarm(alarm);

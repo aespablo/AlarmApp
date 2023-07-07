@@ -1,6 +1,6 @@
-import 'package:alarm/db/alarm_db_helper.dart';
-import 'package:alarm/models/alarm.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../db/alarm_db_helper.dart';
+import '../models/alarm.dart';
 
 final asyncAlarmProvider =
     AsyncNotifierProvider<AsyncAlarmNotifier, List<Alarm>>(

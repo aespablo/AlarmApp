@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:alarm/src/home_page.dart';
+
+import 'services/notification.dart';
+import 'src/home_page.dart';
 
 Future<void> main() async {
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Future.delayed(const Duration(milliseconds: 10));
+  await _initSetup();
   runApp(const ProviderScope(child: MyApp()));
-  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
@@ -28,4 +27,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
     );
   }
+}
+
+Future<void> _initSetup() async {
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await configNotification();
+  FlutterNativeSplash.remove();
 }

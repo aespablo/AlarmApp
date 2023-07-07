@@ -33,6 +33,5 @@ Future<void> _initSetup() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await configNotification();
-  await Future.delayed(const Duration(milliseconds: 10));
   FlutterNativeSplash.remove();
 }
